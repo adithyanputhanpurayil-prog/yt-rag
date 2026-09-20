@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "YouTube Video Q&A (RAG)",
+  "version": "1.0.0",
+  "description": "Ask questions about the YouTube video you're watching, answered from its transcript.",
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["http://localhost:8000/*", "https://*/*"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}

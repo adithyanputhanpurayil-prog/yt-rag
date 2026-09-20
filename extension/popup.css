@@ -1,0 +1,122 @@
+:root {
+  --bg: #faf9f6;
+  --ink: #1c1c1e;
+  --muted: #6b6b68;
+  --line: #e3e1da;
+  --accent: #0f6b66;
+  --accent-ink: #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  width: 340px;
+  margin: 0;
+  padding: 14px 16px 16px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 13px/1.45 -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+}
+
+#settingsToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--muted);
+  padding: 2px 4px;
+}
+
+.hidden { display: none !important; }
+
+.state { padding-top: 2px; }
+
+#settingsPanel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+#settingsPanel label {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 7px 8px;
+  font: inherit;
+  background: #fff;
+  color: var(--ink);
+  resize: vertical;
+}
+
+button {
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 7px 12px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+button:disabled {
+  background: var(--line);
+  color: var(--muted);
+  cursor: default;
+}
+
+#saveSettings { margin-top: 6px; }
+
+.status {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 6px 0 0;
+}
+
+#videoLabel {
+  margin: 0 0 4px;
+  font-size: 12.5px;
+}
+
+#answerBox {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+#answerText {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+details {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+#sourcesList li {
+  margin-bottom: 6px;
+}

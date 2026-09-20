@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Video Q&A</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header>
+    <h1>Ask this video</h1>
+    <button id="settingsToggle" title="Backend settings">⚙</button>
+  </header>
+
+  <section id="settingsPanel" class="hidden">
+    <label for="backendUrl">Backend URL</label>
+    <input id="backendUrl" type="text" placeholder="http://localhost:8000" />
+    <button id="saveSettings">Save</button>
+  </section>
+
+  <section id="notYoutube" class="hidden state">
+    <p>Open a YouTube video to ask questions about it.</p>
+  </section>
+
+  <section id="loadState" class="state">
+    <p id="videoLabel">Detecting video…</p>
+    <button id="loadButton" disabled>Load transcript</button>
+    <p id="loadStatus" class="status"></p>
+  </section>
+
+  <section id="qaState" class="hidden state">
+    <p id="readyLabel" class="status"></p>
+    <textarea id="question" rows="2" placeholder="What does the video say about…"></textarea>
+    <button id="askButton">Ask</button>
+    <div id="answerBox" class="hidden">
+      <p id="answerText"></p>
+      <details id="sourcesDetails">
+        <summary>Transcript excerpts used</summary>
+        <ol id="sourcesList"></ol>
+      </details>
+    </div>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>
