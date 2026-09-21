@@ -28,6 +28,10 @@ _VIDEO_ID_RE = re.compile(r"^[a-zA-Z0-9_-]{11}$")
 
 class IngestRequest(BaseModel):
     video_id: str
+    # Sent by the extension, which reads the transcript in the browser to
+    # avoid YouTube's IP-blocking of cloud hosts. If omitted, falls back to
+    # fetching server-side (works locally, often blocked once deployed).
+    transcript: str | None = None
 
 
 class IngestResponse(BaseModel):
@@ -68,7 +72,7 @@ def ingest(req: IngestRequest):
         return IngestResponse(video_id=video_id, chunks_indexed=0, already_indexed=True)
 
     try:
-        transcript = fetch_transcript(video_id)
+        transcript = req.transcript.strip() if req.transcript else fetch_transcript(video_id)
     except TranscriptUnavailable as e:
         raise HTTPException(422, f"No transcript available for this video: {e}")
 

@@ -3,14 +3,14 @@
   "name": "YouTube Video Q&A (RAG)",
   "version": "1.0.0",
   "description": "Ask questions about the YouTube video you're watching, answered from its transcript.",
-  "permissions": [
-    "activeTab", 
-    "storage",
-    "scripting"
-  ],
-  "host_permissions": [
-    "*://*.youtube.com/*",
-    "https://yt-rag-backend-caep.onrender.com/*"
+  "permissions": ["activeTab", "storage"],
+  "host_permissions": ["http://localhost:8000/*", "https://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
   ],
   "action": {
     "default_popup": "popup.html"

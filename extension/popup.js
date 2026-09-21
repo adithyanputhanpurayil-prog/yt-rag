@@ -6,13 +6,10 @@ function extractVideoId(url) {
   if (!url) return null;
   try {
     const u = new URL(url);
-    const hostname = u.hostname.toLowerCase();
-    if (hostname === "youtu.be") return u.pathname.split("/")[1] || null;
-    if (hostname.endsWith("youtube.com")) {
+    if (u.hostname === "youtu.be") return u.pathname.slice(1, 12) || null;
+    if (u.hostname.endsWith("youtube.com")) {
       if (u.pathname === "/watch") return u.searchParams.get("v");
-      for (const prefix of ["/shorts/", "/live/"]) {
-        if (u.pathname.startsWith(prefix)) return u.pathname.split("/")[2] || null;
-      }
+      if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2];
     }
   } catch (_) {}
   return null;
@@ -35,13 +32,31 @@ async function api(path, body) {
   return data;
 }
 
+async function getTranscriptFromPage(tabId) {
+  return new Promise((resolve, reject) => {
+    chrome.tabs.sendMessage(tabId, { type: "GET_TRANSCRIPT" }, (response) => {
+      if (chrome.runtime.lastError) {
+        reject(new Error("Couldn't reach the page -- try reloading the YouTube tab."));
+        return;
+      }
+      if (!response?.ok) {
+        reject(new Error(response?.error || "Could not read the transcript from this page"));
+        return;
+      }
+      resolve(response.text);
+    });
+  });
+}
+
 let currentVideoId = null;
+let currentTabId = null;
 
 async function init() {
   el("backendUrl").value = await getBackendUrl();
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   currentVideoId = extractVideoId(tab?.url);
+  currentTabId = tab?.id;
 
   if (!currentVideoId) {
     el("notYoutube").classList.remove("hidden");
@@ -64,9 +79,11 @@ el("saveSettings").addEventListener("click", async () => {
 
 el("loadButton").addEventListener("click", async () => {
   el("loadButton").disabled = true;
-  el("loadStatus").textContent = "Fetching transcript and indexing…";
+  el("loadStatus").textContent = "Reading transcript from the page…";
   try {
-    const result = await api("/ingest", { video_id: currentVideoId });
+    const transcript = await getTranscriptFromPage(currentTabId);
+    el("loadStatus").textContent = "Indexing transcript…";
+    const result = await api("/ingest", { video_id: currentVideoId, transcript });
     el("loadStatus").textContent = result.already_indexed
       ? "Already indexed -- ready."
       : `Indexed ${result.chunks_indexed} chunks -- ready.`;
